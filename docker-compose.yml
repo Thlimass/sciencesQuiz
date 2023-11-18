@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    container_name: my_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: DB_NAME
+      POSTGRES_USER: DB_USER
+      POSTGRES_PASSWORD: DB_PASSWORD
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    container_name: my_app
+    restart: always
+    volumes:
+      - .:/app
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=sciences_quiz
+      - DB_USER=admin
+      - DB_PASSWORD=admin
+    command: python app.py
+    depends_on:
+      - db
